@@ -1,0 +1,37 @@
+<div class="vendor-list">
+  <div class="toolbar">
+    <a routerLink="/vendors/new" class="btn-primary">Add Vendor</a>
+  </div>
+
+  <p *ngIf="loading">Loading vendors...</p>
+  <p *ngIf="error" class="error">{{ error }}</p>
+
+  <table *ngIf="!loading && vendors.length" class="vendor-table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Description</th>
+        <th>Address</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let vendor of vendors">
+        <td>{{ vendor.id }}</td>
+        <td>{{ vendor.description }}</td>
+        <td>{{ vendor.address }}</td>
+        <td class="actions">
+          <a [routerLink]="['/vendors', vendor.id]">Edit</a>
+          <button type="button" (click)="remove(vendor.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && !vendors.length && !error">No vendors found.</p>
+
+  <div class="pager">
+    <button type="button" (click)="previous()" [disabled]="skip === 0">Previous</button>
+    <button type="button" (click)="next()" [disabled]="vendors.length < take">Next</button>
+  </div>
+</div>

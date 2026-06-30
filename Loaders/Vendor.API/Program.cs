@@ -16,6 +16,19 @@ namespace Vendor.API
             builder.Services.Configure<VendorSettings>(builder.Configuration.GetSection("VendorSettings"));
             builder.Services.AddSingleton<ILoaderFactory, LoaderFactory>();
             builder.Services.AddScoped<IVendorService, VendorService>();
+
+
+            const string angularDevClient = "AngularDevClient";
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(angularDevClient, policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Vendor API", Version = "v1" });
@@ -44,7 +57,8 @@ namespace Vendor.API
             }
 
             // app.UseAuthorization();
-          
+
+            app.UseCors(angularDevClient);
 
             app.UseExceptionHandler();
 
