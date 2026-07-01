@@ -61,9 +61,10 @@ namespace Vendor.API.Controllers
 
         [HttpDelete]
         [SwaggerOperation(Summary = "Delete vendor by id")]
-        public Task Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            return _vendorService.Delete(id);
+            await _vendorService.Delete(id);
+            return NoContent();
         }
     }
 }

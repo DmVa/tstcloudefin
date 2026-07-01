@@ -14,34 +14,69 @@ namespace Vendor.Logic
 
         public Task Add(Dto.Vendor vendor)
         {
-            var trader = ToTrader(vendor);
-            return _loader.InsertTrader(trader);
+            try
+            {
+                var trader = ToTrader(vendor);
+                return _loader.InsertTrader(trader);
+            }
+            catch (Exception ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
 
         public Task Delete(string vendorId)
         {
-            return _loader.DeleteTrader(vendorId);
+            try
+            {
+                return _loader.DeleteTrader(vendorId);
+            }
+            catch (Exception ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
 
         public async Task<Dto.Vendor> GetVendor(string id)
         {
-            var trader = await _loader.LoadTrader(id);
-            return ToVendor(trader);
+            try
+            {
+                var trader = await _loader.LoadTrader(id);
+                return ToVendor(trader);
+            }
+            catch (Exception ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
         public async Task<IEnumerable<Dto.Vendor>> GetVendors()
         {
-            var traders = await _loader.LoadTraders();
-            var vendors = traders.Select(s => ToVendor(s));
-            return vendors;
+            try
+            {
+                var traders = await _loader.LoadTraders();
+                var vendors = traders.Select(s => ToVendor(s));
+                return vendors;
+            }
+            catch (Exception ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
-        
+
 
         public Task Update(Dto.Vendor vendor)
         {
-            return _loader.UpdateTrader(ToTrader(vendor));
+            try
+            {
+                return _loader.UpdateTrader(ToTrader(vendor));
+            }
+            catch (Exception ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
 
-        private static Trader ToTrader(Dto.Vendor vendor)
+        internal static Trader ToTrader(Dto.Vendor vendor)
         {
             return new Trader
             {
@@ -51,13 +86,13 @@ namespace Vendor.Logic
             };
         }
 
-        private static Dto.Vendor ToVendor(Trader supplier)
+        internal static Dto.Vendor ToVendor(Trader supplier)
         {
             return new Dto.Vendor
             {
                 Id = supplier.Code,
-                Description = supplier.Street,
-                Address = supplier.Description
+                Description = supplier.Description,
+                Address = supplier.Street
             };
         }
 

@@ -12,6 +12,7 @@ namespace Vendor.Logic
 
         public async Task<IEnumerable<Dto.Vendor>> GetVendors(int skip, int count)
         {
+            
             var vendors = await _loader.GetVendors();
             var result = vendors.Skip(skip).Take(count);
             return result;

@@ -17,7 +17,8 @@ namespace Vendor.API
             builder.Services.AddSingleton<ILoaderFactory, LoaderFactory>();
             builder.Services.AddScoped<IVendorService, VendorService>();
 
-
+           
+            // only for development env.
             const string angularDevClient = "AngularDevClient";
             builder.Services.AddCors(options =>
             {
@@ -39,7 +40,7 @@ namespace Vendor.API
 
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddExceptionHandler<ApiExceptionHandler>();
+            builder.Services.AddExceptionHandler<VendorApiExceptionHandler>();
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
             var app = builder.Build();

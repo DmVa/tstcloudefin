@@ -13,37 +13,72 @@ namespace Vendor.Logic
 
         public Task Add(Dto.Vendor vendor)
         {
-            var supplier = ToSupplier(vendor);  
-            _loader.InsertSupplier(supplier);
+            try
+            {
+                var supplier = ToSupplier(vendor);
+                _loader.InsertSupplier(supplier);
+            }
+            catch (ApiException ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }   
             return Task.CompletedTask;
         }
 
         public Task Delete(string vendorId)
         {
-            _loader.DeleteSupplier(vendorId);
-            return Task.CompletedTask;
+            try
+            {
+                _loader.DeleteSupplier(vendorId);
+                return Task.CompletedTask;
+            }
+            catch (ApiException ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
 
         public Task<Dto.Vendor> GetVendor(string id)
         {
-            var result = _loader.LoadSupplier(id);
-            return Task.FromResult(ToVendor(result));
+            try
+            {
+                var result = _loader.LoadSupplier(id);
+                return Task.FromResult(ToVendor(result));
+            }
+            catch (ApiException ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
 
         public Task<IEnumerable<Dto.Vendor>> GetVendors()
         {
-            var suppliers = _loader.LoadSuppliers();
-            var vendors = suppliers.Select(s => ToVendor(s));
-            return Task.FromResult(vendors);
+            try
+            {
+                var suppliers = _loader.LoadSuppliers();
+                var vendors = suppliers.Select(s => ToVendor(s));
+                return Task.FromResult(vendors);
+            }
+            catch (ApiException ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
 
         public Task Update(Dto.Vendor vendor)
         {
-            _loader.UpdateSupplier(ToSupplier(vendor));
-            return Task.CompletedTask;
+            try
+            {
+                _loader.UpdateSupplier(ToSupplier(vendor));
+                return Task.CompletedTask;
+            }
+            catch (ApiException ex)
+            {
+                throw new VendorApiException(ex, ex.Message);
+            }
         }
 
-        private static Supplier ToSupplier(Dto.Vendor vendor)
+        internal static Supplier ToSupplier(Dto.Vendor vendor)
         {
             return new Supplier
             {
@@ -53,7 +88,7 @@ namespace Vendor.Logic
             };
         }
 
-        private static Dto.Vendor ToVendor(Supplier supplier)
+        internal static Dto.Vendor ToVendor(Supplier supplier)
         {
             return new Dto.Vendor
             {
